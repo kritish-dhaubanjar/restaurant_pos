@@ -20,20 +20,3 @@ sequelize
   .catch(err => {
     console.error("Unable to connect to the database:", err);
   });
-
-/**************************************************************************************************** */
-
-const express = require("express");
-const category = require("./routes/category");
-const menu = require("./routes/menu");
-const table = require("./routes/table");
-const app = express();
-
-app.use(express.json());
-app.use("/category", category);
-app.use("/menu", menu);
-app.use("/table", table);
-
-app.listen(8000, () => {
-  console.log("Server running @ 8000.");
-});

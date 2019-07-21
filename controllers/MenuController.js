@@ -7,34 +7,40 @@ findById = id => {
   });
 };
 
-exports.store = () => {
-  let category_id = 1;
-  let name = "Ved(Steam)";
-  let rate = 85.0;
+exports.store = (req, res, next) => {
+  let category_id = req.body.category_id;
+  let name = req.body.name;
+  let rate = req.body.rate;
 
   Category.findAll({
     where: {
       id: category_id
     }
   }).then(categories => {
-    categories[0].createMenu({ name, rate });
+    categories[0].createMenu({ name, rate }).then(() => {
+      return res.send({ status: 201 });
+    });
   });
 };
 
-exports.update = () => {
-  let menu_id = 2;
-  let name = "Mushroom Pizza";
-  let rate = 250;
-  return findById(menu_id).then(menu => {
+exports.update = (req, res, next) => {
+  let menu_id = req.params.id;
+  let name = req.body.name;
+  let rate = req.body.rate;
+  findById(menu_id).then(menu => {
     menu.name = name;
     menu.rate = rate;
-    return menu.save();
+    menu.save().then(() => {
+      return res.send({ status: 200 });
+    });
   });
 };
 
-exports.delete = () => {
-  let menu_id = 1;
-  return findById(menu_id).then(menu => {
-    return menu.destroy();
+exports.delete = (req, res, next) => {
+  let menu_id = req.params.id;
+  findById(menu_id).then(menu => {
+    menu.destroy().then(() => {
+      return res.send({ status: 200 });
+    });
   });
 };
