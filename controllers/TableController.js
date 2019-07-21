@@ -110,6 +110,8 @@ exports.removeItem = (req, res, next) => {
 exports.checkout = (req, res, next) => {
   let table_id = req.params.id;
   let discount = req.body.discount;
+  let tax = req.body.tax;
+  let service_charge = req.body.service_charge;
   let total = 0;
   Reservation.findAll({
     where: { tableId: table_id },
@@ -127,7 +129,11 @@ exports.checkout = (req, res, next) => {
         .createTransaction({
           discount,
           total,
-          grandTotal: total - (discount / 100) * total
+          grandTotal:
+            total -
+            (discount / 100) * total +
+            service_charge +
+            (tax / 100) * total
         })
         .then(() => {
           findById(table_id).then(table => {
